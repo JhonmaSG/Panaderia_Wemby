@@ -27,8 +27,33 @@
             </div>
             <nav id="mainav" class="fl_right">
                 <ul class="clear">
-                    <li class="active"><a href="{{route('welcome')}}">Inicio</a></li>
-                    <li><a href="{{route('login')}}">Login</a></li>
+                    <li class="active"><a href="{{ route('welcome') }}">Inicio</a></li>
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }}
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
                     <li><a class="drop" href="#">Inventarios</a>
                         <ul>
                             <li><a href="pages/gallery.html">Inventarios de insumos</a></li>
@@ -90,7 +115,7 @@
         @yield('content')
     </main>
     <!-- Footer Background Image Wrapper -->
-    <div class="bgded overlay" style="background-image:url({{asset('assets/images/footer.jpg')}});">
+    <div class="bgded overlay" style="background-image:url({{ asset('assets/images/footer.jpg') }});">
         <div class="wrapper row4">
             <footer id="footer" class="hoc clear">
                 <div class="one_quarter first">

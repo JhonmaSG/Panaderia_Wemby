@@ -58,7 +58,7 @@
                                 @enderror
                             </div>
                             <div class="pt-1 mb-4">
-                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-lg btn-block" type="button">Iniciar Sesion</button>
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-lg btn-block" type="submit">Iniciar Sesion</button>
                             </div>
                             @if (Route::has('password.request'))
                                     <a class="text-muted" href="{{ route('password.request') }}">
