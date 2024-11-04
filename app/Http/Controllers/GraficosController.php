@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Models\Venta;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
@@ -67,9 +68,52 @@ class GraficosController extends Controller
             'chart_type' => 'bar',
         ];
         $chart = new LaravelChart($chart_options);
+        // if ($range === "monthly") {
+        //     $mes = 02;
+        //     $anio = 2024;
 
+        //     // Validar los datos (opcional)
+        //     if (!$mes || !$anio) {
+        //         // Manejar el caso en que no se proporcionen valores
+        //         return redirect()->back()->with('error', 'Debes seleccionar un mes y año');
+        //     }
+
+        //     // Construir el rango de fechas
+        //     $startDate = Carbon::create($anio, $mes, 1);
+        //     $endDate = $startDate->copy()->endOfMonth();
+
+        //     $ventas1 = Venta::whereBetween('fecha_venta', [$startDate, $endDate])->get();
+        //     $chart->($ventas1);
+        // }
         // Calcular el total de ventas
-        $total_ventas= Venta::sum('total_venta');
+        switch ($range) {
+            case 'daily':
+                // Suma las ventas del día actual
+                $total_ventas = Venta::whereDate('fecha_venta', now()->toDateString())
+                    ->sum('total_venta');
+                break;
+
+            case 'weekly':
+                // Suma las ventas de la semana actual
+                $total_ventas = Venta::whereBetween('fecha_venta', [
+                    now()->startOfWeek()->toDateString(),
+                    now()->endOfWeek()->toDateString()
+                ])
+                    ->sum('total_venta');
+                break;
+
+            case 'monthly':
+                // Suma las ventas del mes actual
+                $total_ventas = Venta::whereYear('fecha_venta', now()->year)
+                    ->whereMonth('fecha_venta', now()->month)
+                    ->sum('total_venta');
+                break;
+
+            default:
+                // Suma todas las ventas si no hay rango específico
+                $total_ventas = Venta::sum('total_venta');
+                break;
+        }
 
         // Calcular el stock total de inventario
         $stockInventario = Producto::sum('stock');
