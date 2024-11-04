@@ -10,4 +10,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/reports', [GraficosController::class, 'grafico'])->name('graficos');
+Route::get('/reports', [GraficosController::class, 'ventas'])->name('graficos.ventas');

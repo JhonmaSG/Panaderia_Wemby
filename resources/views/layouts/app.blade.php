@@ -18,7 +18,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-
+@yield("style")
 <body id="top">
     <div class="wrapper row1">
         <header id="header" class="hoc clear">
@@ -54,19 +54,24 @@
                             </div>
                         </li>
                     @endguest
-                    <li><a class="drop" href="#">Inventarios</a>
+                    <li><a class="drop">Inventarios</a>
                         <ul>
                             <li><a href="pages/gallery.html">Inventarios de insumos</a></li>
                             <li><a href="pages/full-width.html">Inventarios de productos</a></li>
                         </ul>
                     </li>
-                    <li><a class="drop" href="#">Ventas</a>
+                    <li><a class="drop">Ventas</a>
                         <ul>
                             <li><a href="#">Registrar venta</a></li>
                             <li><a href="#">Consultar ventas</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{route('graficos')}}">Analisis y Reportes</a></li>
+                    <li><a>Analisis y Reportes</a>
+                        <ul>
+                            <li><a href="{{route('graficos.ventas')}}">Generar Reporte</a></li>
+                            <li><a href="#">Consultar ventas</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </header>
