@@ -8,9 +8,28 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Insumos;
 use App\Models\Proveedor;
+use Illuminate\Support\Facades\Log;
 
 class ProductoController extends Controller
 {
+    public function index(Request $request)
+    {
+        $categorias = Categoria::all(); // Obtener todas las categorías para el filtro dropdown
+    
+        $query = Producto::with('categoria', 'insumos', 'proveedores');
+    
+        // Aplicar filtro solo si 'categoria' está presente y no es vacío
+        if ($request->has('categoria') && !empty($request->categoria)) {
+            $query->where('id_categoria', $request->categoria);
+        }
+    
+        $productos = $query->get();
+    
+        return view('index_producto', compact('productos', 'categorias'));
+    }
+    
+    
+
     public function create()
     {
         $categorias = Categoria::all();

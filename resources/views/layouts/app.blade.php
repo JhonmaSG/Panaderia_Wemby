@@ -57,7 +57,7 @@
                     <li><a class="drop" href="#">Inventarios</a>
                         <ul>
                             <li><a href="pages/gallery.html">Inventarios de insumos</a></li>
-                            <li><a href="pages/full-width.html">Inventarios de productos</a></li>
+                            <li><a href="#">Inventarios de productos</a></li>
                         </ul>
                     </li>
                     <li><a class="drop" href="#">Ventas</a>

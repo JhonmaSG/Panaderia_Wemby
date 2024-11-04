@@ -9,9 +9,10 @@ class Proveedor extends Model
 {
     use HasFactory;
     protected $table = "proveedores";
+    protected $primaryKey = 'id_proveedor';
 
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'proveedores_productos', 'id_proveedor', 'id_producto');
-    }
+    }    
 }
