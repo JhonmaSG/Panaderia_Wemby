@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proveeedores_producto extends Model
+class Insumos extends Model
 {
     use HasFactory;
-    protected $table = "proveedores_productos";
+    protected $table = "insumos";
+    protected $primaryKey = 'id_insumo';
 }
