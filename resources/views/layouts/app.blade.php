@@ -66,7 +66,7 @@
                             <li><a href="#">Consultar ventas</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Analisis y Reportes</a></li>
+                    <li><a href="{{route('graficos')}}">Analisis y Reportes</a></li>
                 </ul>
             </nav>
         </header>
@@ -184,6 +184,7 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.backtotop.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.mobilemenu.js') }}"></script>
+    @yield("scripts")
 </body>
 
 </html>
