@@ -15,21 +15,18 @@ class ProductoController extends Controller
     public function index(Request $request)
     {
         $categorias = Categoria::all(); // Obtener todas las categorías para el filtro dropdown
-    
+
         $query = Producto::with('categoria', 'insumos', 'proveedores');
-    
+
         // Aplicar filtro solo si 'categoria' está presente y no es vacío
         if ($request->has('categoria') && !empty($request->categoria)) {
             $query->where('id_categoria', $request->categoria);
         }
-    
+
         $productos = $query->get();
-    
+
         return view('index_producto', compact('productos', 'categorias'));
     }
-    
-    
-
     public function create()
     {
         $categorias = Categoria::all();
@@ -39,8 +36,8 @@ class ProductoController extends Controller
     }
 
     public function store(Request $request)
-    {   
-        
+    {
+
         $request->validate([
             'codigo' => 'required|unique:productos,codigo_producto|max:255',
             'nombre' => 'required|max:255',
@@ -66,7 +63,7 @@ class ProductoController extends Controller
                     foreach ($request->insumos as $id_insumo) {
                         $cantidad_usada = $request->cantidad_insumo[$id_insumo] ?? 0;
                         $total_necesario = $cantidad_usada * $request->stock; // Multiplicar la cantidad necesaria por el stock del producto
-    
+
                         $insumo = Insumos::find($id_insumo);
                         if ($insumo && $insumo->stock >= $total_necesario) {
                             $producto->insumos()->attach($id_insumo, ['cantidad_usada' => $cantidad_usada]);
@@ -75,7 +72,7 @@ class ProductoController extends Controller
                             throw new \Exception("No hay suficientes insumos disponibles");
                         }
                     }
-                }              
+                }
 
 
                 if ($request->has('proveedores')) {
@@ -91,4 +88,32 @@ class ProductoController extends Controller
             return redirect()->route('productos.create')->withErrors('Error: ' . $e->getMessage());
         }
     }
+
+    public function editStock($id)
+    {
+        $producto = Producto::with(['insumos' => function ($query) {
+            $query->withPivot('cantidad_usada');
+        }])->findOrFail($id);
+
+        $insumosTotales = Insumos::select('id_insumo', 'nombre_insumo', 'stock')->get();
+        return view('edit-stock', compact('producto', 'insumosTotales'));
+    }
+    
+    public function updateStock($id, Request $request)
+    {
+        $request->validate([
+            'stock' => 'required|integer|min:0'
+        ]);
+        try {
+            $producto = Producto::findOrFail($id);
+            $producto->stock = $request->stock;
+            $producto->save();
+        
+            return redirect()->route('productos.index')->with('success', 'Stock actualizado correctamente.');
+        }catch (\Exception $e) {
+            return redirect()->route('productos.index')->withErrors('Error: ' . $e->getMessage());
+        }
+
+    }
+    
 }
