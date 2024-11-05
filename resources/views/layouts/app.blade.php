@@ -56,7 +56,7 @@
                     @endguest
                     <li><a class="drop">Inventarios</a>
                         <ul>
-                            <li><a href="#">Inventarios de insumos</a></li>
+                            <li><a href="{{ route('insumos.index') }}">Inventarios de insumos</a></li>
                             <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
                         </ul>
                     </li>
@@ -64,7 +64,7 @@
                     <li><a>Analisis y Reportes</a>
                         <ul>
                             <li><a href="{{route('graficos.ventas')}}">Generar Reporte</a></li>
-                            <li><a href="#">Consultar ventas</a></li>
+                            <li><a href="{{ route('ventas.index') }}">Consultar ventas</a></li>
                         </ul>
                     </li>
                 </ul>

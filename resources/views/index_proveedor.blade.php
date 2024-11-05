@@ -39,6 +39,14 @@
         @endforeach
         </tbody>
     </table>
-    <a href="{{ route('productos.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Productos</a>
+    <div class="row">
+        <div class="col-sm">
+            <a href="{{ route('productos.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Productos</a>
+        </div>
+        <div class="col-sm">
+            <a href="{{ route('insumos.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Insumos</a>
+        </div>
+    </div>
+    
 </div>
 @endsection

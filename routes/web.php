@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalisisController;
 use App\Http\Controllers\GraficosController;
+use App\Http\Controllers\InsumosController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
@@ -31,6 +32,17 @@ Route::post('/productos/{id}/actualizar-stock', [ProductoController::class, 'upd
 
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
 
+//insumos
+
+Route::get('/insumos', [InsumosController::class, 'index'])->name('insumos.index');
+
+Route::get('/insumos/registrar', [InsumosController::class, 'create'])->name('insumos.create');
+
+Route::post('/insumos/registrar', [InsumosController::class, 'store'])->name('insumos.store');
+
+Route::get('/insumos/{id}/editar-stock', [InsumosController::class, 'editStock'])->name('insumos.edit-stock');
+
+Route::post('/insumos/{id}/actualizar-stock', [InsumosController::class, 'updateStock'])->name('insumos.update-stock');
 
 //sprint ventas
 
