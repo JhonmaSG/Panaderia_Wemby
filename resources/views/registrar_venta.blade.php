@@ -1,0 +1,113 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <!-- Mensajes de Éxito -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Mensajes de Error -->
+        @if (session('errors'))
+            <div class="alert alert-danger" role="alert">
+                @foreach (session('errors')->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
+        <h2>Crear Venta</h2>
+        <form action="{{ route('ventas.store') }}" method="POST">
+            <div class="row">
+                <div class="col-sm">
+                    @csrf
+                    <div class="form-group">
+                        <label for="cajero_id">
+                            <h5>Cajero</h5>
+                        </label>
+                        <select class="form-control" id="cajero_id" name="cajero_id">
+                            @foreach ($cajeros as $cajero)
+                                <option value="{{ $cajero->id }}">{{ $cajero->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="documento_cliente">
+                            <h5>Documento del Cliente</h5>
+                        </label>
+                        <input type="text" class="form-control" id="documento_cliente" name="documento_cliente" required>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div id="productos-container">
+                        <div class="form-group producto-item">
+                            <label for="productos">Productos</label>
+                            <select class="form-control producto-select" name="productos[]"
+                                onchange="updatePriceAndStock(this)">
+                                <option value="">Seleccione un producto</option>
+                                @foreach ($productos as $producto)
+                                    <option value="{{ $producto->id_producto }}" data-price="{{ $producto->precio }}"
+                                        data-stock="{{ $producto->stock }}">
+                                        {{ $producto->nombre }} - ${{ $producto->precio }} - Stock: {{ $producto->stock }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="precios[]" class="producto-precio" value="0">
+                            <label for="cantidad">Cantidad</label>
+                            <input type="number" class="form-control cantidad" name="cantidades[]" min="1" required
+                                onchange="updateTotal()">
+                        </div>
+
+                    </div>
+                    <button type="button" class="btn btn-secondary" style="margin: 10px; width: 25%"
+                        onclick="addProduct()">Añadir Producto</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <strong>Total de la Venta: <span id="totalVenta">$0</span></strong>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin: 10px">Confirmar Venta</button>
+        </form>
+    </div>
+
+    <script>
+        let productos = @json($productos);
+
+        function addProduct() {
+            let container = document.getElementById('productos-container');
+            let firstProduct = container.querySelector('.producto-item');
+            let newProduct = firstProduct.cloneNode(true);
+            newProduct.querySelector('.producto-select').selectedIndex = 0;
+            newProduct.querySelector('.cantidad').value = '';
+            container.appendChild(newProduct);
+        }
+
+        function updatePriceAndStock(select) {
+            let price = select.options[select.selectedIndex].dataset.price;
+            let stock = select.options[select.selectedIndex].dataset.stock;
+            let precioInput = select.closest('.producto-item').querySelector('.producto-precio');
+            precioInput.value = price; // Actualiza el campo oculto con el precio
+            let cantidadInput = select.closest('.producto-item').querySelector('.cantidad');
+            cantidadInput.max = stock;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.producto-item').forEach(item => {
+                let price = item.querySelector('.producto-select').selectedOptions[0].dataset.price || 0;
+                let cantidad = item.querySelector('.cantidad').value || 0;
+                total += price * cantidad;
+            });
+            document.getElementById('totalVenta').textContent = `$${total.toFixed(2)}`;
+        }
+
+        document.getElementById('productos-container').addEventListener('change', function(event) {
+            if (event.target.classList.contains('cantidad')) {
+                updateTotal();
+            }
+        });
+    </script>
+@endsection
