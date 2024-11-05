@@ -23,7 +23,7 @@
         <form action="{{ route('productos.index') }}" method="GET">
             <div class="form-group">
                 <label for="categoria">Filtrar por Categoría:</label>
-                <select class="form-control" id="categoria" name="categoria">
+                <select class="form-control" id="categoria" name="categoria" style="width: 25%">
                     <option value="">Sin filtrar</option>
                     @foreach ($categorias as $categoria)
                         <option value="{{ $categoria->id_categoria }}"
@@ -34,10 +34,17 @@
                 </select>
             </div>
         </form>
+        <form action="{{ route('productos.index') }}" method="GET">
+            <div class="form-group">
+                <label for="search">Buscar Producto:</label>
+                <input type="text" class="form-control" id="search" name="search" placeholder="Nombre o código del producto">
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar producto</button>
+        </form>        
         <table class="table">
             <thead>
                 <tr>
-                    <th>Código</th>
+                    <th>Código del producto</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th>Precio</th>

@@ -18,12 +18,23 @@ class ProductoController extends Controller
 
         $query = Producto::with('categoria', 'insumos', 'proveedores');
 
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where(function($q) use ($request) {
+                $q->where('nombre', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('codigo_producto', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
         // Aplicar filtro solo si 'categoria' está presente y no es vacío
         if ($request->has('categoria') && !empty($request->categoria)) {
             $query->where('id_categoria', $request->categoria);
         }
 
         $productos = $query->get();
+
+        if($productos->isEmpty() && ($request->has('search') || $request->has('categoria'))) {
+            return redirect()->route('productos.index')->with('error', 'Producto no encontrado');
+        }
 
         return view('index_producto', compact('productos', 'categorias'));
     }
