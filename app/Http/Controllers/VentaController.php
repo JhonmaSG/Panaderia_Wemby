@@ -17,11 +17,11 @@ class VentaController extends Controller
             $search = $request->search;
             $ventas->where(function ($query) use ($search) {
                 $query->where('num_factura', 'LIKE', "%{$search}%")
-                      ->orWhere('documento_cliente', 'LIKE', "%{$search}%")
-                      ->orWhere('fecha_venta', 'LIKE', "%{$search}%");
+                    ->orWhere('documento_cliente', 'LIKE', "%{$search}%")
+                    ->orWhere('fecha_venta', 'LIKE', "%{$search}%");
             });
         }
-    
+
         $ventas = $ventas->get();
         return view('index_ventas', compact('ventas'));
     }
@@ -77,6 +77,51 @@ class VentaController extends Controller
             return redirect()->route('ventas.create')->with('success', 'Venta creada correctamente');
         } catch (\Exception $e) {
             return redirect()->route('ventas.create')->withErrors('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        $venta = Venta::with('detalleVenta.producto')->findOrFail($id);
+        $productos = Producto::all();
+        $cajeros = User::where('rol', 1)->get();
+
+        return view('edit-venta', compact('venta', 'productos', 'cajeros'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $venta = Venta::findOrFail($id);
+            $venta->documento_cliente = $request->documento_cliente;
+            $total_venta = 0;
+
+            foreach ($request->productos as $index => $producto_id) {
+                $detalle = $venta->detalleVenta()->where('id_producto', $producto_id)->first();
+                if ($detalle) {
+                    $cantidad_anterior = $detalle->cantidad;
+                    $cantidad_nueva = $request->cantidades[$index];
+
+                    
+                    if ($cantidad_nueva > $cantidad_anterior) {
+                        $incremento = $cantidad_nueva - $cantidad_anterior;
+                        $detalle->producto->decrement('stock', $incremento);
+                    }
+
+                    $detalle->cantidad = $cantidad_nueva;
+                    $detalle->save();
+
+                    $total_venta += $detalle->precio_unitario * $detalle->cantidad;
+                }
+            }
+
+            
+            $venta->total_venta = $total_venta;
+            $venta->save();
+
+            return redirect()->route('ventas.index')->with('success', 'Venta actualizada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('ventas.index')->withErrors('Error: ' . $e->getMessage());
         }
     }
 }

@@ -54,6 +54,7 @@
                 <td>${{ number_format($venta->total_venta, 2) }}</td>
                 <td>
                     <a class="btn btn-info" href="{{ route('ventas.show', $venta->id_venta) }}">Detalles</a>
+                    <a class="btn btn-warning" href="{{ route('ventas.edit', $venta->id_venta) }}">Editar</a>
                 </td>
             </tr>
             @endforeach

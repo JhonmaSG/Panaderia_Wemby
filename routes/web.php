@@ -40,6 +40,8 @@ Route::get('/ventas/crear-venta', [VentaController::class, 'create'])->name('ven
 Route::post('/ventas/crear-venta', [VentaController::class, 'store'])->name('ventas.store');
 Route::get('/ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
+Route::get('/ventas/{venta}/editar', [VentaController::class, 'edit'])->name('ventas.edit');
+Route::put('/ventas/{venta}', [VentaController::class, 'update'])->name('ventas.update');
 //sprint reportes y análisis
 
 Route::get('/reports', [GraficosController::class, 'ventas'])->name('graficos.ventas');

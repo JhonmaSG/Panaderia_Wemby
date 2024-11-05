@@ -17,6 +17,8 @@ class Detalle_venta extends Model
         'precio_unitario'
     ];
 
+    protected $primaryKey = "id_detalle";
+
     public function venta()
     {
         return $this->belongsTo(Venta::class, 'num_factura', 'num_factura');
