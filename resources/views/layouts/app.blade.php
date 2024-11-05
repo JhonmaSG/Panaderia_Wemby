@@ -56,15 +56,11 @@
                     @endguest
                     <li><a class="drop" href="#">Inventarios</a>
                         <ul>
-                            <li><a href="pages/gallery.html">Inventarios de insumos</a></li>
-                            <li><a href="#">Inventarios de productos</a></li>
+                            <li><a href="#">Inventarios de insumos</a></li>
+                            <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
                         </ul>
                     </li>
-                    <li><a class="drop" href="#">Ventas</a>
-                        <ul>
-                            <li><a href="#">Registrar venta</a></li>
-                            <li><a href="#">Consultar ventas</a></li>
-                        </ul>
+                    <li><a href="#">Ventas</a>
                     </li>
                     <li><a href="#">Analisis y Reportes</a></li>
                 </ul>

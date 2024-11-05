@@ -19,29 +19,43 @@
             </div>
         @endif
         <h1>Listado de Productos</h1>
-        <a href="{{ route('productos.create') }}" class="btn btn-primary">Registrar Producto</a>
-        <form action="{{ route('productos.index') }}" method="GET">
-            <div class="form-group">
-                <label for="categoria">Filtrar por Categoría:</label>
-                <select class="form-control" id="categoria" name="categoria" style="width: 25%">
-                    <option value="">Sin filtrar</option>
-                    @foreach ($categorias as $categoria)
-                        <option value="{{ $categoria->id_categoria }}"
-                            {{ request('categoria') == $categoria->id_categoria ? 'selected' : '' }}>
-                            {{ $categoria->nombre_categoria }}
-                        </option>
-                    @endforeach
-                </select>
+        <div class="row">
+            <div class="col-sm">
+                <h4>Registar producto</h4>
+                <a href="{{ route('productos.create') }}" class="btn btn-primary">Registrar Producto</a>
             </div>
-        </form>
-        <form action="{{ route('productos.index') }}" method="GET">
-            <div class="form-group">
-                <label for="search">Buscar Producto:</label>
-                <input type="text" class="form-control" id="search" name="search" style="width: 25%" placeholder="Nombre o código del producto">
+            <div class="col-sm">
+                <form action="{{ route('productos.index') }}" method="GET">
+                    <div class="form-group">
+                        <label for="categoria"> <h4>Filtrar por Categoría:</h4></label>
+                        <select class="form-control" id="categoria" name="categoria">
+                            <option value="">Sin filtrar</option>
+                            @foreach ($categorias as $categoria)
+                                <option value="{{ $categoria->id_categoria }}"
+                                    {{ request('categoria') == $categoria->id_categoria ? 'selected' : '' }}>
+                                    {{ $categoria->nombre_categoria }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Buscar producto</button>
-        </form>
-        <a href="{{ route('proveedores.index') }}" class="btn btn-primary">Mostrar proveedores</a>    
+            <div class="col-sm">
+                <form action="{{ route('productos.index') }}" method="GET">
+                    <div class="form-group">
+                        <label for="search"><h4>Buscar Producto</h4></label>
+                        <input type="text" class="form-control" id="search" name="search"
+                            placeholder="Nombre o código del producto">
+                    </div>
+                    <button type="submit" class="btn btn-primary"  style="margin: 10px">Buscar producto</button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <h4>Mostrar proveedores</h4>
+                <a href="{{ route('proveedores.index') }}" class="btn btn-primary">Mostrar proveedores</a>
+            </div>
+
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -70,7 +84,7 @@
                                 <span class="text-muted">Sin proveedores</span>
                             @else
                                 @foreach ($producto->proveedores as $proveedor)
-                                    <span class="badge bg-primary">{{ $proveedor->nombre }}</span>
+                                <h5><span class="badge bg-primary">{{ $proveedor->nombre }}</span></h5>
                                 @endforeach
                             @endif
                         </td>
@@ -79,8 +93,8 @@
                                 <span class="text-muted">Sin insumos</span>
                             @else
                                 @foreach ($producto->insumos as $insumo)
-                                    <span class="badge bg-info">{{ $insumo->nombre_insumo }}:
-                                        {{ $insumo->pivot->cantidad_usada }}</span>
+                                    <h5><span class="badge bg-primary">{{ $insumo->nombre_insumo }}:
+                                        {{ $insumo->pivot->cantidad_usada }}</span></h5>
                                 @endforeach
                             @endif
                         </td>
@@ -93,10 +107,10 @@
                 @endforeach
             </tbody>
         </table>
-        <script>
-            document.getElementById('categoria').addEventListener('change', function() {
-                this.form.submit();
-            });
-        </script>
     </div>
+    <script>
+        document.getElementById('categoria').addEventListener('change', function() {
+            this.form.submit();
+        });
+    </script>
 @endsection

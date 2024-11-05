@@ -3,13 +3,14 @@
 @section('content')
 <div class="container">
     <h2>Listado de Proveedores</h2>
-    <form action="{{ route('proveedores.index') }}" method="GET">
-        <div class="form-group">
-            <label for="search">Buscar proveedor:</label>
-            <input type="text" class="form-control" id="search" name="search" style="width: 25%" placeholder="Nombre o código del producto">
-        </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
+        <form action="{{ route('proveedores.index') }}" method="GET">
+            <div class="form-group">
+                <label for="search"><h4>Buscar proveedor:</h4></label>
+                <input type="text" class="form-control" id="search" name="search" style="width: 25%" placeholder="Nombre del proveedor">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin: 10px">Buscar</button>
+        </form>
+
     <table class="table">
         <thead>
             <tr>
@@ -26,17 +27,18 @@
                 <td>{{ $proveedor->contacto }}</td>
                 <td>
                     @foreach ($proveedor->productos as $producto)
-                        <span class="badge bg-primary">{{ $producto->nombre }}</span>
+                        <h5><span class="badge bg-primary">{{ $producto->nombre }}</span></h5>
                     @endforeach
                 </td>
                 <td>
                     @foreach ($proveedor->insumos as $insumo)
-                        <span class="badge bg-info">{{ $insumo->nombre_insumo }}</span>
+                        <h5><span class="badge bg-primary">{{ $insumo->nombre_insumo }}</span></h5>
                     @endforeach
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
+    <a href="{{ route('productos.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Productos</a>
 </div>
 @endsection
