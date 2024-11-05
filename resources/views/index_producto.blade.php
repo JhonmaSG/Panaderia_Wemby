@@ -37,10 +37,11 @@
         <form action="{{ route('productos.index') }}" method="GET">
             <div class="form-group">
                 <label for="search">Buscar Producto:</label>
-                <input type="text" class="form-control" id="search" name="search" placeholder="Nombre o código del producto">
+                <input type="text" class="form-control" id="search" name="search" style="width: 25%" placeholder="Nombre o código del producto">
             </div>
             <button type="submit" class="btn btn-primary">Buscar producto</button>
-        </form>        
+        </form>
+        <a href="{{ route('proveedores.index') }}" class="btn btn-primary">Mostrar proveedores</a>    
         <table class="table">
             <thead>
                 <tr>

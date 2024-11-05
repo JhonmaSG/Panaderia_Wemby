@@ -14,5 +14,10 @@ class Proveedor extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'proveedores_productos', 'id_proveedor', 'id_producto');
-    }    
+    }
+
+    public function insumos()
+    {
+        return $this->belongsToMany(Insumos::class, 'proveedores_insumos', 'id_proveedor', 'id_insumo');
+    }
 }
