@@ -68,6 +68,7 @@ class GraficosController extends Controller
             'chart_type' => 'bar',
         ];
         $chart = new LaravelChart($chart_options);
+        ;
         // if ($range === "monthly") {
         //     $mes = 02;
         //     $anio = 2024;
@@ -120,4 +121,76 @@ class GraficosController extends Controller
         // return $ventas;
         return view('Reports.reportes_ventas', compact('ventas', 'range', 'chart', 'total_ventas'));
     }
+
+    function mostrarFormulario()
+    {
+        // Obtener todos los productos disponibles
+        $productos = Producto::all();
+        return view('Analisis.analisis', compact('productos'));
+    }
+
+    function generarGrafica(Request $request)
+    {
+        // Validar los datos recibidos
+        $validated = $request->validate([
+            'tipo_grafica' => 'required|string',
+            'parametro' => 'required|string',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date',
+            'productos' => 'required|array',
+        ]);
+
+        // Extraer los datos validados
+        $productosSeleccionados = $validated['productos'];
+        $fechaInicio = Carbon::parse($validated['fecha_inicio']);
+        $fechaFin = Carbon::parse($validated['fecha_fin']);
+        $parametro = $validated['parametro'];
+
+        // Obtener los productos seleccionados
+        $productos = Producto::whereIn('id_producto', $productosSeleccionados)->get();
+
+        // Dependiendo del parámetro seleccionado (diarias, semanales, mensuales), realizar la consulta adecuada
+        if ($parametro === 'diaria') {
+            $ventas = Venta::selectRaw('DATE(ventas.fecha_venta) as fecha, SUM(dv.cantidad * dv.precio_unitario) as total')
+                ->join('detalle_venta as dv', 'ventas.num_factura', '=', 'dv.num_factura')
+                ->whereIn('dv.id_producto', $productosSeleccionados)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->groupBy('fecha')
+                ->orderBy('fecha')
+                ->get();
+        } elseif ($parametro === 'semanal') {
+            $ventas = Venta::selectRaw('WEEK(v.fecha_venta) as semana, SUM(dv.cantidad * dv.precio_unitario) as total')
+                ->join('detalle_venta as dv', 'ventas.num_factura', '=', 'dv.num_factura')
+                ->whereIn('dv.id_producto', $productosSeleccionados)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->groupBy('semana')
+                ->orderBy('semana')
+                ->get();
+        } else {
+            $ventas = Venta::selectRaw('MONTH(v.fecha_venta) as mes, SUM(dv.cantidad * dv.precio_unitario) as total')
+                ->join('detalle_venta as dv', 'ventas.num_factura', '=', 'dv.num_factura')
+                ->whereIn('dv.id_producto', $productosSeleccionados)
+                ->whereBetween('ventas.fecha_venta', [$fechaInicio, $fechaFin])
+                ->groupBy('mes')
+                ->orderBy('mes')
+                ->get();
+        }
+
+        // Preparar los datos para el gráfico
+        $labels = [];
+        $totales = [];
+        foreach ($ventas as $venta) {
+            if ($parametro === 'diaria') {
+                $labels[] = Carbon::parse($venta->fecha)->format('d/m/Y');
+            } elseif ($parametro === 'semanal') {
+                $labels[] = "Semana " . $venta->semana;
+            } else {
+                $labels[] = Carbon::parse("2020-{$venta->mes}-01")->format('F');
+            }
+            $totales[] = $venta->total;
+        }
+
+        // Pasar los datos a la vista
+        return view('Analisis.grafico', compact('labels', 'totales', 'validated'));
+    } 
 }
