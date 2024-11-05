@@ -9,4 +9,5 @@ class Proveedores_producto extends Model
 {
     use HasFactory;
     protected $table = "proveedores_productos";
+    
 }

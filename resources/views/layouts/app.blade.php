@@ -18,7 +18,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-
+@yield("style")
 <body id="top">
     <div class="wrapper row1">
         <header id="header" class="hoc clear">
@@ -54,15 +54,19 @@
                             </div>
                         </li>
                     @endguest
-                    <li><a class="drop" href="#">Inventarios</a>
+                    <li><a class="drop">Inventarios</a>
                         <ul>
                             <li><a href="#">Inventarios de insumos</a></li>
                             <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Ventas</a>
+                    <li><a href="#">Ventas</a></li>
+                    <li><a>Analisis y Reportes</a>
+                        <ul>
+                            <li><a href="{{route('graficos.ventas')}}">Generar Reporte</a></li>
+                            <li><a href="#">Consultar ventas</a></li>
+                        </ul>
                     </li>
-                    <li><a href="#">Analisis y Reportes</a></li>
                 </ul>
             </nav>
         </header>
@@ -180,6 +184,7 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.backtotop.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.mobilemenu.js') }}"></script>
+    @yield("scripts")
 </body>
 
 </html>
