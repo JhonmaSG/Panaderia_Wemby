@@ -17,6 +17,13 @@ class Venta extends Model
         'total_venta'
     ];
 
+    protected $primaryKey = "id_venta";
+
+    public function cajero()
+    {
+        return $this->belongsTo(User::class, 'id_cajero');
+    }
+
     public function detalleVenta()
     {
         return $this->hasMany(Detalle_Venta::class, 'num_factura', 'num_factura');

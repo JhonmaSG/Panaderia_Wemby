@@ -60,7 +60,7 @@
                             <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Ventas</a></li>
+                    <li><a href="{{ route('ventas.index') }}">Ventas</a></li>
                     <li><a>Analisis y Reportes</a>
                         <ul>
                             <li><a href="{{route('graficos.ventas')}}">Generar Reporte</a></li>

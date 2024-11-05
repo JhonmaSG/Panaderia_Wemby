@@ -68,7 +68,18 @@
             <div class="form-group">
                 <strong>Total de la Venta: <span id="totalVenta">$0</span></strong>
             </div>
-            <button type="submit" class="btn btn-primary" style="margin: 10px">Confirmar Venta</button>
+            <div class="row">
+                <div class="col-sm">
+                    <button type="submit" class="btn btn-primary" style="margin: 10px">Confirmar Venta</button>
+                </div>
+                <div class="col-sm">
+                    {{-- Aquí agregar el botón de cancelar venta --}}
+                </div>
+                <div class="col-sm">
+                    <a href="{{ route('ventas.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Ventas</a>
+                </div>
+            </div>
+            
         </form>
     </div>
 

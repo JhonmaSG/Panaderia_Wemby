@@ -34,8 +34,11 @@ Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveed
 
 //sprint ventas
 
+Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+
 Route::get('/ventas/crear-venta', [VentaController::class, 'create'])->name('ventas.create');
 Route::post('/ventas/crear-venta', [VentaController::class, 'store'])->name('ventas.store');
+Route::get('/ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
 //sprint reportes y análisis
 
