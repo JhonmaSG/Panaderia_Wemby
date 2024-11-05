@@ -42,6 +42,9 @@ Route::get('/ventas/{venta}', [VentaController::class, 'show'])->name('ventas.sh
 
 Route::get('/ventas/{venta}/editar', [VentaController::class, 'edit'])->name('ventas.edit');
 Route::put('/ventas/{venta}', [VentaController::class, 'update'])->name('ventas.update');
+
+Route::post('/ventas/cancelar', [VentaController::class, 'cancel'])->name('ventas.cancel');
+
 //sprint reportes y análisis
 
 Route::get('/reports', [GraficosController::class, 'ventas'])->name('graficos.ventas');

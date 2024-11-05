@@ -25,6 +25,11 @@ class VentaController extends Controller
         $ventas = $ventas->get();
         return view('index_ventas', compact('ventas'));
     }
+    public function cancel()
+    {
+        return redirect()->route('ventas.index')->with('success', 'Cancelado con éxito');
+    }
+
 
     public function show($id)
     {
@@ -102,7 +107,7 @@ class VentaController extends Controller
                     $cantidad_anterior = $detalle->cantidad;
                     $cantidad_nueva = $request->cantidades[$index];
 
-                    
+
                     if ($cantidad_nueva > $cantidad_anterior) {
                         $incremento = $cantidad_nueva - $cantidad_anterior;
                         $detalle->producto->decrement('stock', $incremento);
@@ -115,7 +120,7 @@ class VentaController extends Controller
                 }
             }
 
-            
+
             $venta->total_venta = $total_venta;
             $venta->save();
 

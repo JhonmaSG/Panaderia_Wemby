@@ -73,15 +73,41 @@
                     <button type="submit" class="btn btn-primary" style="margin: 10px">Confirmar Venta</button>
                 </div>
                 <div class="col-sm">
-                    {{-- Aquí agregar el botón de cancelar venta --}}
+                    <button type="button" style="margin: 10px" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                        Cancelar Venta
+                    </button>
                 </div>
                 <div class="col-sm">
                     <a href="{{ route('ventas.index') }}" class="btn btn-primary" style="margin: 10px">Volver a Ventas</a>
                 </div>
             </div>
-            
+
         </form>
     </div>
+
+    <!-- Modal de Cancelar Venta -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de querer cancelar esta venta?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <a href="{{ route('ventas.index') }}" class="btn btn-danger"
+                    onclick="event.preventDefault(); document.getElementById('cancel-form').submit();">Sí</a>
+                </div>
+                <form id="cancel-form" action="{{ route('ventas.cancel') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         let productos = @json($productos);
