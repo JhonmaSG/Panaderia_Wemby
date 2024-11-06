@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $rol1 = new Rol();
-        $rol1->nombre_rol = "Dueño";
+        $rol1->nombre_rol = "Cajero";
         $rol1->save();
 
         $rol2 = new Rol();
@@ -39,12 +39,19 @@ class DatabaseSeeder extends Seeder
         $rol2->save();
 
         $rol3 = new Rol();
-        $rol3->nombre_rol = "Cajero";
+        $rol3->nombre_rol = "Dueño";
         $rol3->save();
 
         $usuario = new User();
         $usuario->name = "Admin";
         $usuario->email = 'admin@gmail.com';
+        $usuario->password = Hash::make("12345678");
+        $usuario->rol = 3;
+        $usuario->save();
+
+        $usuario = new User();
+        $usuario->name = "Janziska";
+        $usuario->email = 'peroquecojones@gmail.com';
         $usuario->password = Hash::make("12345678");
         $usuario->rol = 1;
         $usuario->save();
