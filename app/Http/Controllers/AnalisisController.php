@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\IsBoss;
 use App\Models\Categoria;
 use App\Models\Detalle_venta;
 use App\Models\Producto;
@@ -15,7 +16,7 @@ class AnalisisController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', IsBoss::class]);
     }
     public function showAnalysisForm()
     {

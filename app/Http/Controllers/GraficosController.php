@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\IsBoss;
 use App\Models\Producto;
 use App\Models\Venta;
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ class GraficosController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', IsBoss::class]);
     }
     function grafico()
     {

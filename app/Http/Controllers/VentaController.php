@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\IsSeller;
 use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\User;
@@ -11,7 +12,7 @@ class VentaController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth',IsSeller::class]);
     }
     public function index(Request $request)
     {
