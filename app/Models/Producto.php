@@ -26,4 +26,9 @@ class Producto extends Model
     {
         return $this->belongsToMany(Insumos::class, 'productos_insumos', 'id_producto', 'id_insumo')->withPivot('cantidad_usada');
     }
+
+    public function detallesVenta()
+    {
+        return $this->hasMany(detalle_venta::class, 'id_producto');
+    }
 }

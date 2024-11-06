@@ -14,11 +14,12 @@
     <link href="{{ asset('assets/css/layout.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/framework.css') }}" rel="stylesheet" />
-
+    @yield('head')
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-@yield("style")
+@yield('style')
+
 <body id="top">
     <div class="wrapper row1">
         <header id="header" class="hoc clear">
@@ -54,19 +55,42 @@
                             </div>
                         </li>
                     @endguest
-                    <li><a class="drop">Inventarios</a>
-                        <ul>
-                            <li><a href="{{ route('insumos.index') }}">Inventarios de insumos</a></li>
-                            <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ route('ventas.index') }}">Ventas</a></li>
-                    <li><a>Analisis y Reportes</a>
-                        <ul>
-                            <li><a href="{{route('graficos.ventas')}}">Generar Reporte</a></li>
-                            <li><a href="{{ route('ventas.index') }}">Consultar ventas</a></li>
-                        </ul>
-                    </li>
+                    @if (Auth::user() == null)
+                        <li><a class="drop">Inventarios</a>
+                            <ul>
+                                <li><a href="{{ route('insumos.index') }}">Inventarios de insumos</a></li>
+                                <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
+                            </ul>
+                        </li>
+                    @elseif (Auth::user()->rol == 2 || Auth::user()->rol == 3)
+                        <li><a class="drop">Inventarios</a>
+                            <ul>
+                                <li><a href="{{ route('insumos.index') }}">Inventarios de insumos</a></li>
+                                <li><a href="{{ route('productos.index') }}">Inventarios de productos</a></li>
+                            </ul>
+                        </li>
+                    @endif
+                    @if (Auth::user() == null)
+                        <li><a href="{{ route('ventas.index') }}">Ventas</a></li>
+                    @elseif (Auth::user()->rol == 1)
+                        <li><a href="{{ route('ventas.index') }}">Ventas</a></li>
+                    @endif
+                    @if (Auth::user() == null)
+                        <li><a>Analisis y Reportes</a>
+                            <ul>
+                                <li><a href="{{ route('graficos.ventas') }}">Generar Reporte</a></li>
+                                <li><a href="{{ route('ventas.index') }}">Consultar ventas</a></li>
+                            </ul>
+                        </li>
+                    @elseif (Auth::user()->rol == 3)
+                        <li><a>Analisis y Reportes</a>
+                            <ul>
+                                <li><a href="{{ route('graficos.ventas') }}">Generar Reporte</a></li>
+                                <li><a href="{{ route('ventas.index') }}">Consultar ventas</a></li>
+                            </ul>
+                        </li>
+                    @endif
+
                 </ul>
             </nav>
         </header>
@@ -184,7 +208,7 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.backtotop.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.mobilemenu.js') }}"></script>
-    @yield("scripts")
+    @yield('scripts')
 </body>
 
 </html>

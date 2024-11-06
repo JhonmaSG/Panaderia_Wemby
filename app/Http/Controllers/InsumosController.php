@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Log;
 
 class InsumosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
         

@@ -20,7 +20,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //sprint inventario
 
-Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index')->middleware('');
 
 Route::get('/productos/registrar', [ProductoController::class, 'create'])->name('productos.create');
 
@@ -62,3 +62,5 @@ Route::post('/ventas/cancelar', [VentaController::class, 'cancel'])->name('venta
 Route::get('/reports', [GraficosController::class, 'ventas'])->name('graficos.ventas');
 Route::get('/analisis', [AnalisisController::class, 'showAnalysisForm'])->name('analisis.form');
 Route::post('/analisis/generar', [AnalisisController::class, 'generateAnalysis'])->name('analisis.generate');
+Route::get('/reportes', [GraficosController::class, 'showForm'])->name('form'); // Ruta para mostrar el formulario
+Route::get('/reportes/grafica', [GraficosController::class, 'generateGraph'])->name('generate.graph'); // Ruta para generar la gráfica

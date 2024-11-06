@@ -12,6 +12,10 @@ use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class GraficosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     function grafico()
     {
         // ...
@@ -120,4 +124,57 @@ class GraficosController extends Controller
         // return $ventas;
         return view('Reports.reportes_ventas', compact('ventas', 'range', 'chart', 'total_ventas'));
     }
+
+    public function showForm()
+    {
+        // Obtener todos los productos para que el usuario pueda seleccionar
+        $productos = Producto::all();
+        return view('reports.form', compact('productos'));
+    }
+
+    // Método para generar la gráfica
+    public function generateGraph(Request $request)
+{
+    // Validación de los parámetros de entrada
+    $request->validate([
+        'start_date' => 'required|date',
+        'end_date' => 'required|date',
+        'frequency' => 'required|in:daily,weekly,monthly',
+        'products' => 'nullable|array',
+        'chart_type' => 'required|in:line,bar,pie', // Aseguramos que el tipo de gráfico sea uno de los tres
+    ]);
+
+    // Filtrar ventas según el rango de fechas
+    $ventasQuery = Venta::whereBetween('fecha_venta', [$request->start_date, $request->end_date]);
+
+    // Filtrar productos si es necesario
+    if ($request->has('products') && !empty($request->products)) {
+        // Obtener los detalles de las ventas que correspondan a los productos seleccionados
+        $ventasQuery->whereHas('detalleVenta', function ($query) use ($request) {
+            $query->whereIn('id_producto', $request->products);
+        });
+    }
+
+    // Obtener las ventas agrupadas según la frecuencia seleccionada (diaria, semanal, mensual)
+    $ventasData = $ventasQuery->get()->groupBy(function($venta) use ($request) {
+        switch ($request->frequency) {
+            case 'daily':
+                return Carbon::parse($venta->fecha_venta)->format('Y-m-d');
+            case 'weekly':
+                return Carbon::parse($venta->fecha_venta)->startOfWeek()->format('Y-W');
+            case 'monthly':
+                return Carbon::parse($venta->fecha_venta)->format('Y-m');
+        }
+    });
+
+    // Preparar los datos para la gráfica
+    $labels = $ventasData->keys();
+    $values = $ventasData->map(function($group) {
+        return $group->sum('total_venta');
+    });
+    $chartType  = $request->chart_type;
+    // Pasar los datos y el tipo de gráfico a la vista
+    return view('Reports.graficos', compact('labels', 'values', 'chartType'));
+}
+
 }
