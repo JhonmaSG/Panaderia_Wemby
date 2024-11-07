@@ -9,6 +9,7 @@ use App\Models\Venta;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class GraficosController extends Controller
@@ -126,6 +127,9 @@ class GraficosController extends Controller
         return view('Reports.reportes_ventas', compact('ventas', 'range', 'chart', 'total_ventas'));
     }
 
+
+
+
     public function showForm()
     {
         // Obtener todos los productos para que el usuario pueda seleccionar
@@ -133,49 +137,39 @@ class GraficosController extends Controller
         return view('reports.form', compact('productos'));
     }
 
+
     // Método para generar la gráfica
     public function generateGraph(Request $request)
-{
-    // Validación de los parámetros de entrada
-    $request->validate([
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
-        'frequency' => 'required|in:daily,weekly,monthly',
-        'products' => 'nullable|array',
-        'chart_type' => 'required|in:line,bar,pie', // Aseguramos que el tipo de gráfico sea uno de los tres
-    ]);
+    {
+        // Obtener los parámetros de la solicitud
+        $rangoFechas = $request->input('rango_fechas');
+        $productosSeleccionados = $request->input('productos',[]);
+        $tipoGrafica = $request->input('tipo_grafica'); // 'bar', 'line', 'pie'
+        $productosSeleccionados = array_map('intval', $productosSeleccionados);
+        $productosString = implode(',', $productosSeleccionados);
+        // Definir el rango de fechas
+        $fechaInicio = Carbon::parse($rangoFechas['inicio']);
+        $fechaFin = Carbon::parse($rangoFechas['fin']);
 
-    // Filtrar ventas según el rango de fechas
-    $ventasQuery = Venta::whereBetween('fecha_venta', [$request->start_date, $request->end_date]);
+        // Consultar las ventas en el rango de fechas seleccionado, uniendo con la tabla detalle_venta
+        $ventas = DB::select("CALL obtenerVentasPorProducto('".$fechaInicio."', '".$fechaFin."','".json_encode($productosSeleccionados)."')");
+    
+        // // Depurar el resultado
+        // // dd($ventas); // Verifica que los datos estén llegando correctamente
 
-    // Filtrar productos si es necesario
-    if ($request->has('products') && !empty($request->products)) {
-        // Obtener los detalles de las ventas que correspondan a los productos seleccionados
-        $ventasQuery->whereHas('detalleVenta', function ($query) use ($request) {
-            $query->whereIn('id_producto', $request->products);
-        });
-    }
+        // Preparar los datos para la gráfica
+        $labels = []; // Etiquetas (productos)
+        $data = [];   // Datos (cantidad total vendida o total en ventas)
 
-    // Obtener las ventas agrupadas según la frecuencia seleccionada (diaria, semanal, mensual)
-    $ventasData = $ventasQuery->get()->groupBy(function($venta) use ($request) {
-        switch ($request->frequency) {
-            case 'daily':
-                return Carbon::parse($venta->fecha_venta)->format('Y-m-d');
-            case 'weekly':
-                return Carbon::parse($venta->fecha_venta)->startOfWeek()->format('Y-W');
-            case 'monthly':
-                return Carbon::parse($venta->fecha_venta)->format('Y-m');
+        // Obtener los productos y sus totales vendidos
+        foreach ($ventas as $venta) {
+            $producto = Producto::find($venta->id_producto); // Obtener el nombre del producto
+
+            $labels[] = $producto->nombre;  // Etiqueta del producto
+            $data[] = $venta->total_vendido; // Total vendido (en valor monetario)
         }
-    });
-
-    // Preparar los datos para la gráfica
-    $labels = $ventasData->keys();
-    $values = $ventasData->map(function($group) {
-        return $group->sum('total_venta');
-    });
-    $chartType  = $request->chart_type;
-    // Pasar los datos y el tipo de gráfico a la vista
-    return view('Reports.graficos', compact('labels', 'values', 'chartType'));
-}
-
+        // return $ventas;
+        // Pasar los datos y el tipo de gráfico a la vista
+        return view('Reports.graficos', compact('labels', 'data', 'tipoGrafica', 'productosSeleccionados', 'rangoFechas'));
+    }
 }

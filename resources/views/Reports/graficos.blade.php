@@ -13,43 +13,44 @@
 
         <!-- Contenedor para la gráfica -->
         <div class="card">
+            <h2 class="mt-5">Gráfica de {{ ucfirst($tipoGrafica) }}</h2>
             <div class="card-body">
-                <canvas id="salesChart" width="400" height="200"></canvas>
+                <canvas id="grafica" class="my-4" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
 @endsection
 
 @section('scripts')
-<script>
-    var ctx = document.getElementById('salesChart').getContext('2d');
-    var salesChart = new Chart(ctx, {
-        type: '{{ $chartType }}', // Usamos el tipo de gráfico pasado desde el controlador
-        data: {
-            labels: @json($labels), // Etiquetas de las fechas (e.g., días, semanas, meses)
-            datasets: [{
-                label: 'Ventas Totales',
-                data: @json($values), // Datos de las ventas totales
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                fill: '{{ $chartType == "line" ? "false" : "true" }}' // Si es gráfico de líneas, no se llena el área
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return `Ventas: $${tooltipItem.raw}`;
+    <script>
+        const ctx = document.getElementById('grafica').getContext('2d');
+        const grafica = new Chart(ctx, {
+            type: '{{ $tipoGrafica }}', // Tipo de gráfica: 'bar', 'line', 'pie'
+            data: {
+                labels: @json($labels), // Etiquetas de la gráfica (productos)
+                datasets: [{
+                    label: 'Total Vendido',
+                    data: @json($data), // Totales de ventas por producto
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '€ ' + tooltipItem.raw.toFixed(2); // Mostrar en formato de precio
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
 @endsection
