@@ -70,7 +70,7 @@
             </div>
             <div class="row">
                 <div class="col-sm">
-                    <button type="submit" class="btn btn-primary" style="margin: 10px">Confirmar Venta</button>
+                    <button type="button" class="btn btn-primary" style="margin: 10px" data-bs-toggle="modal" data-bs-target="#facturaModal">Confirmar Venta</button>
                 </div>
                 <div class="col-sm">
                     <button type="button" style="margin: 10px" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
@@ -82,8 +82,41 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="facturaModal" tabindex="-1" aria-labelledby="facturaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="facturaModalLabel">Factura</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">2
+                            ¿Desea Generar una factura de esta compra?
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" onclick="document.getElementById('generate_invoice').value = 'false';">
+                                No, solo venta
+                            </button>
+                            <!-- Botón para enviar el formulario con factura -->
+                            <button type="submit" class="btn btn-success" onclick="document.getElementById('generate_invoice').value = 'true';">
+                                Sí
+                            </button>
+                        </div>
+                        {{-- <form id="cancel-form" action="{{ route('ventas.cancel') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form> --}}
+                    </div>
+                </div>
+            </div>
+
+             <!-- Campo oculto para indicar si se genera factura o no -->
+            <input type="hidden" id="generate_invoice" name="generate_invoice" value="false">
+
         </form>
     </div>
+
+    <!-- Modal de Generar Factura -->
+    
 
     <!-- Modal de Cancelar Venta -->
     <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
@@ -146,5 +179,9 @@
                 updateTotal();
             }
         });
+        function submitVenta(generateInvoice) {
+        document.getElementById('generateInvoice').value = generateInvoice;
+        document.getElementById('ventaForm').submit();
+    }
     </script>
 @endsection

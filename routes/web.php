@@ -64,3 +64,9 @@ Route::get('/analisis', [AnalisisController::class, 'showAnalysisForm'])->name('
 Route::post('/analisis/generar', [AnalisisController::class, 'generateAnalysis'])->name('analisis.generate');
 Route::get('/reportes', [GraficosController::class, 'showForm'])->name('form'); // Ruta para mostrar el formulario
 Route::get('/reportes/grafica', [GraficosController::class, 'generateGraph'])->name('generate.graph'); // Ruta para generar la gráfica
+
+Route::get('/factura/{venta}', [VentaController::class, 'generate'])->name('factura.generate');
+
+Route::get('/factura', function () {
+    return view('layouts.factura');
+});

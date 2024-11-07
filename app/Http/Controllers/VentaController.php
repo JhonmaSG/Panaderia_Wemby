@@ -54,7 +54,6 @@ class VentaController extends Controller
 
     public function store(Request $request)
     {
-
         $request->validate([
             'cajero_id' => 'required|exists:users,id',
             'documento_cliente' => 'required',
@@ -85,7 +84,16 @@ class VentaController extends Controller
                 $producto->decrement('stock', $request->cantidades[$index]);
             }
 
-            return redirect()->route('ventas.create')->with('success', 'Venta creada correctamente');
+           // Revisar si el usuario quiere una factura
+        if ($request->input('generate_invoice') === 'true') {
+            // Redirigir a la ruta de generación de factura con el ID de la venta
+            // return $venta->id_venta;
+            return redirect()->route('factura.generate', $venta->id_venta)
+                ->with('success', 'Venta creada correctamente. Generando factura...');
+        } else {
+            // Redirigir a la página de creación de ventas
+            return redirect()->route('ventas.index')->with('success', 'Venta creada correctamente');
+        }
         } catch (\Exception $e) {
             return redirect()->route('ventas.create')->withErrors('Error: ' . $e->getMessage());
         }
@@ -134,5 +142,9 @@ class VentaController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('ventas.index')->withErrors('Error: ' . $e->getMessage());
         }
+    }
+
+    public function generate(Venta $venta){
+        return $venta;
     }
 }
