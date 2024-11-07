@@ -15,9 +15,9 @@ class IsBaker
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->rol == 2) {
+        if (Auth::check() && Auth::user()->rol == 2 || Auth::user()->rol == 3) {
             return $next($request);
-        }elseif(Auth::user()->rol == 1 || Auth::user()->rol == 3){
+        }elseif(Auth::user()->rol == 1 ){
             return redirect("/home");
         }
         return redirect("/login");

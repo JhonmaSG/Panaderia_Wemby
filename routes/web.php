@@ -20,7 +20,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //sprint inventario
 
-Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index')->middleware('');
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 
 Route::get('/productos/registrar', [ProductoController::class, 'create'])->name('productos.create');
 

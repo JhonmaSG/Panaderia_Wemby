@@ -10,23 +10,25 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Insumos;
 use App\Models\Proveedor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class InsumosController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth',IsBaker::class, IsBoss::class]);
+        $this->middleware(['auth', IsBaker::class]);
+
     }
     public function index(Request $request)
     {
-        
+
         $categorias = Categoria::all(); // Obtener todas las categorías para el filtro dropdown
 
         $query = Insumos::with('categoria', 'productos', 'proveedores');
 
         if ($request->has('search') && !empty($request->search)) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('nombre_insumo', 'LIKE', '%' . $request->search . '%');
             });
         }
@@ -38,7 +40,7 @@ class InsumosController extends Controller
 
         $insumos = $query->get();
 
-        if($insumos->isEmpty() && ($request->has('search') || $request->has('categoria'))) {
+        if ($insumos->isEmpty() && ($request->has('search') || $request->has('categoria'))) {
             return redirect()->route('insumos.index')->with('error', 'Producto no encontrado');
         }
 
@@ -89,12 +91,12 @@ class InsumosController extends Controller
 
     public function editStock($id)
     {
-        
+
         $insumo = Insumos::findOrFail($id);
 
         return view('edit-stock-insumo', compact('insumo'));
     }
-    
+
     public function updateStock($id, Request $request)
     {
         $request->validate([
@@ -104,11 +106,10 @@ class InsumosController extends Controller
             $insumo = Insumos::findOrFail($id);
             $insumo->stock = $request->stock;
             $insumo->save();
-        
+
             return redirect()->route('insumos.index')->with('success', 'Stock actualizado correctamente.');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->route('insumos.index')->withErrors('Error: ' . $e->getMessage());
         }
-
     }
 }

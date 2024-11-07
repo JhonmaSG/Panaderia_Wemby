@@ -10,14 +10,16 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Insumos;
 use App\Models\Proveedor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ProductoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth',IsBaker::class, IsBoss::class]);
+        $this->middleware(['auth', IsBaker::class]);
     }
+
     public function index(Request $request)
     {
         $categorias = Categoria::all(); // Obtener todas las categorías para el filtro dropdown
