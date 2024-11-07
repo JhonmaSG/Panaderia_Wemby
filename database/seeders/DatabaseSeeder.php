@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Categoria;
+use App\Models\Detalle_venta;
 use App\Models\Insumo;
 use App\Models\Insumos;
 use App\Models\Producto;
@@ -12,6 +13,7 @@ use App\Models\Proveedor;
 use App\Models\Proveedores_producto;
 use App\Models\Rol;
 use App\Models\User;
+use App\Models\Venta;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -159,5 +161,155 @@ class DatabaseSeeder extends Seeder
         $productoInsumo3->id_insumo = 3;
         $productoInsumo3->cantidad_usada = 1;
         $productoInsumo3->save();
+
+        $venta1 = new Venta();
+        $venta1->num_factura = 'FAC001';
+        $venta1->fecha_venta = '2024-11-04 10:00:00';
+        $venta1->documento_cliente = '123456789';
+        $venta1->id_cajero = 1;
+        $venta1->total_venta = 50.00;
+        $venta1->save();
+
+        $venta2 = new Venta();
+        $venta2->num_factura = 'FAC002';
+        $venta2->fecha_venta = '2024-10-02 11:30:00';
+        $venta2->documento_cliente = '987654321';
+        $venta2->id_cajero = 1;
+        $venta2->total_venta = 75.50;
+        $venta2->save();
+
+        $venta3 = new Venta();
+        $venta3->num_factura = 'FAC003';
+        $venta3->fecha_venta = '2024-10-02 14:45:00';
+        $venta3->documento_cliente = '123456789';
+        $venta3->id_cajero = 1;
+        $venta3->total_venta = 120.00;
+        $venta3->save();
+
+        $venta4 = new Venta();
+        $venta4->num_factura = 'FAC004';
+        $venta4->fecha_venta = '2024-10-03 09:15:00';
+        $venta4->documento_cliente = '123456789';
+        $venta4->id_cajero = 1;
+        $venta4->total_venta = 30.00;
+        $venta4->save();
+
+        $venta5 = new Venta();
+        $venta5->num_factura = 'FAC005';
+        $venta5->fecha_venta = '2024-10-05 13:00:00';
+        $venta5->documento_cliente = '111222333';
+        $venta5->id_cajero = 1;
+        $venta5->total_venta = 200.00;
+        $venta5->save();
+
+        $venta6 = new Venta();
+        $venta6->num_factura = 'FAC006';
+        $venta6->fecha_venta = '2024-10-06 15:30:00';
+        $venta6->documento_cliente = '444555666';
+        $venta6->id_cajero = 1;
+        $venta6->total_venta = 95.00;
+        $venta6->save();
+
+        $venta7 = new Venta();
+        $venta7->num_factura = 'FAC007';
+        $venta7->fecha_venta = '2024-10-08 17:00:00';
+        $venta7->documento_cliente = '777888999';
+        $venta7->id_cajero = 1;
+        $venta7->total_venta = 60.00;
+        $venta7->save();
+
+        $venta8 = new Venta();
+        $venta8->num_factura = 'FAC008';
+        $venta8->fecha_venta = '2024-10-10 10:30:00';
+        $venta8->documento_cliente = '123456789';
+        $venta8->id_cajero = 1;
+        $venta8->total_venta = 110.50;
+        $venta8->save();
+
+        $venta9 = new Venta();
+        $venta9->num_factura = 'FAC009';
+        $venta9->fecha_venta = '2024-10-12 12:00:00';
+        $venta9->documento_cliente = '000111222';
+        $venta9->id_cajero = 1;
+        $venta9->total_venta = 150.00;
+        $venta9->save();
+
+        $venta10 = new Venta();
+        $venta10->num_factura = 'FAC010';
+        $venta10->fecha_venta = '2024-10-15 08:00:00';
+        $venta10->documento_cliente = '333444555';
+        $venta10->id_cajero = 1;
+        $venta10->total_venta = 80.00;
+        $venta10->save();
+
+        $detalle_venta1 = new Detalle_venta();
+        $detalle_venta1->num_factura = 'FAC001';
+        $detalle_venta1->id_producto = 1;
+        $detalle_venta1->cantidad = 1;
+        $detalle_venta1->precio_unitario = 1.5;
+        $detalle_venta1->save();
+
+        $detalle_venta2 = new Detalle_venta();
+        $detalle_venta2->num_factura = 'FAC002';
+        $detalle_venta2->id_producto = 2;
+        $detalle_venta2->cantidad = 1;
+        $detalle_venta2->precio_unitario = 3;
+        $detalle_venta2->save();
+
+        $detalle_venta3 = new Detalle_venta();
+        $detalle_venta3->num_factura = 'FAC003';
+        $detalle_venta3->id_producto = 1;
+        $detalle_venta3->cantidad = 1;
+        $detalle_venta3->precio_unitario = 1.5;
+        $detalle_venta3->save();
+
+        $detalle_venta4 = new Detalle_venta();
+        $detalle_venta4->num_factura = 'FAC004';
+        $detalle_venta4->id_producto = 2;
+        $detalle_venta4->cantidad = 1;
+        $detalle_venta4->precio_unitario = 3;
+        $detalle_venta4->save();
+
+        $detalle_venta5 = new Detalle_venta();
+        $detalle_venta5->num_factura = 'FAC005';
+        $detalle_venta5->id_producto = 1;
+        $detalle_venta5->cantidad = 1;
+        $detalle_venta5->precio_unitario = 1.5;
+        $detalle_venta5->save();
+
+        $detalle_venta6 = new Detalle_venta();
+        $detalle_venta6->num_factura = 'FAC006';
+        $detalle_venta6->id_producto = 2;
+        $detalle_venta6->cantidad = 1;
+        $detalle_venta6->precio_unitario = 3;
+        $detalle_venta6->save();
+
+        $detalle_venta7 = new Detalle_venta();
+        $detalle_venta7->num_factura = 'FAC007';
+        $detalle_venta7->id_producto = 1;
+        $detalle_venta7->cantidad = 1;
+        $detalle_venta7->precio_unitario = 1.5;
+        $detalle_venta7->save();
+
+        $detalle_venta8 = new Detalle_venta();
+        $detalle_venta8->num_factura = 'FAC008';
+        $detalle_venta8->id_producto = 2;
+        $detalle_venta8->cantidad = 1;
+        $detalle_venta8->precio_unitario = 3;
+        $detalle_venta8->save();
+
+        $detalle_venta9 = new Detalle_venta();
+        $detalle_venta9->num_factura = 'FAC009';
+        $detalle_venta9->id_producto = 1;
+        $detalle_venta9->cantidad = 1;
+        $detalle_venta9->precio_unitario = 1.5;
+        $detalle_venta9->save();
+
+        $detalle_venta10 = new Detalle_venta();
+        $detalle_venta10->num_factura = 'FAC010';
+        $detalle_venta10->id_producto = 2;
+        $detalle_venta10->cantidad = 1;
+        $detalle_venta10->precio_unitario = 3;
+        $detalle_venta10->save();
     }
 }
