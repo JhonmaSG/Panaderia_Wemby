@@ -18,7 +18,7 @@ class IsBaker
         if (Auth::check() && Auth::user()->rol == 2) {
             return $next($request);
         }elseif(Auth::user()->rol == 1 || Auth::user()->rol == 3){
-            return redirect("/dashboard");
+            return redirect("/home");
         }
         return redirect("/login");
     }
