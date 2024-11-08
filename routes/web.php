@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnalisisController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\GraficosController;
 use App\Http\Controllers\InsumosController;
 use Illuminate\Support\Facades\Route;
@@ -70,3 +71,5 @@ Route::get('/factura/{venta}', [VentaController::class, 'generate'])->name('fact
 Route::get('/factura', function () {
     return view('layouts.factura');
 });
+
+// 

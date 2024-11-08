@@ -4,6 +4,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
 
+@section('style')
+    <style>
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container mt-5">
         <h1 class="mb-4">Gráficas de Ventas</h1>
@@ -19,6 +29,8 @@
             </div>
         </div>
     </div>
+
+    <button class="btn btn-primary print-btn" onclick="window.print()" style="margin-top: 20px;">Imprimir</button>
 @endsection
 
 @section('scripts')

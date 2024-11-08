@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\IsSeller;
+use App\Models\Detalle_venta;
 use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\User;
@@ -145,6 +146,13 @@ class VentaController extends Controller
     }
 
     public function generate(Venta $venta){
-        return $venta;
+        $cajero = User::find($venta->id_cajero);
+        $productosVendidos = Detalle_venta::where('num_factura', '=', $venta->num_factura)->get();
+        $productos = [];
+        foreach($productosVendidos as $produc){
+            $producto = Producto::find($produc->id_producto);
+            $productos[] = $producto;
+        }
+        return view('layouts.factura', compact('cajero', 'productosVendidos', 'productos', 'venta'));
     }
 }

@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('style')
+    <style>
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <h2>Resultado del análisis: {{ ucfirst(str_replace('_', ' ', $tipoAnalisis)) }}</h2>
@@ -43,7 +53,8 @@
                 </tbody>
             </table>
         @endif
-
+        
+        <button class="btn btn-primary print-btn" onclick="window.print()" style="margin-top: 20px;">Imprimir</button>
         <a href="{{ route('analisis.form') }}" class="btn btn-secondary">Volver</a>
     </div>
 @endsection
