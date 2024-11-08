@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\Venta;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -318,5 +319,54 @@ class DatabaseSeeder extends Seeder
         $detalle_venta10->cantidad = 1;
         $detalle_venta10->precio_unitario = 3;
         $detalle_venta10->save();
+
+        DB::statement("CREATE PROCEDURE obtenerVentasPorProducto(
+	IN fechaInicio DATETIME,
+    IN fechaFin DATETIME,
+    IN productosSeleccionados JSON)
+BEGIN
+	 SELECT 
+        detalle_venta.id_producto, 
+        SUM(detalle_venta.cantidad * detalle_venta.precio_unitario) AS total_vendido
+    FROM ventas
+    JOIN detalle_venta ON ventas.num_factura = detalle_venta.num_factura
+    WHERE ventas.fecha_venta BETWEEN fechaInicio AND fechaFin
+    AND JSON_CONTAINS(productosSeleccionados, CAST(detalle_venta.id_producto AS JSON), '$')
+    GROUP BY detalle_venta.id_producto;
+END");
+
+        DB::statement('CREATE PROCEDURE mas_vendidos()
+BEGIN
+ SELECT 
+        p.nombre AS nombre, 
+        p.id_categoria as id_categoria,
+        SUM(dv.cantidad) AS stock
+    FROM 
+        detalle_venta dv
+    INNER JOIN 
+        productos p ON dv.id_producto = p.id_producto
+    GROUP BY 
+        p.id_producto
+    ORDER BY 
+        stock DESC
+    LIMIT 10;
+END');
+
+        DB::statement('CREATE PROCEDURE menos_vendidos()
+            BEGIN
+            SELECT 
+                p.nombre AS nombre, 
+                p.id_categoria AS id_categoria,
+                COALESCE(SUM(dv.cantidad), 0) AS stock
+            FROM 
+                productos p
+            LEFT JOIN 
+                detalle_venta dv ON dv.id_producto = p.id_producto
+            GROUP BY 
+                p.id_producto
+            ORDER BY 
+                stock ASC
+            LIMIT 10;
+            END');
     }
 }
