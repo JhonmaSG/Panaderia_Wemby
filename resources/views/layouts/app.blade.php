@@ -79,7 +79,8 @@
                         <li><a>Analisis y Reportes</a>
                             <ul>
                                 <li><a href="{{ route('graficos.ventas') }}">Generar Reporte</a></li>
-                                <li><a href="{{ route('ventas.index') }}">Consultar ventas</a></li>
+                                <li><a href="{{ route('analisis.form') }}">Generar Analisis</a></li>
+                                <li><a href="{{ route('form') }}">Generar Graficas</a></li>
                             </ul>
                         </li>
                     @elseif (Auth::user()->rol == 3)

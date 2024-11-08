@@ -7,9 +7,26 @@
 @section('style')
     <style>
         @media print {
-            .print-btn {
+
+            .select-range {
+                display: none !important;
+            }
+
+            .wrapper.row1,
+            .bgded.overlay {
+                display: none !important;
+            }
+
+            /* Oculta elementos innecesarios */
+            button,
+            .no-print {
                 display: none;
             }
+
+            .btn {
+                display: none !important;
+            }
+
         }
     </style>
 @endsection
@@ -31,6 +48,7 @@
     </div>
 
     <button class="btn btn-primary print-btn" onclick="window.print()" style="margin-top: 20px;">Imprimir</button>
+    <a href="{{ route('form') }}" class="btn btn-secondary">Volver</a>
 @endsection
 
 @section('scripts')

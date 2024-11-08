@@ -51,7 +51,8 @@ class AnalisisController extends Controller
 
             case 'productos_mas_vendidos':
                 // Productos más vendidos en el rango de fechas y categoría seleccionada
-                $resultado = DB::select("call mas_vendidos()");
+                $resultado['mas_vendidos'] = DB::select("call mas_vendidos()");
+                $resultado['menos_vendidos'] = DB::select("call menos_vendidos()");
                 break;
 
             case 'stock_bajo':
@@ -65,7 +66,7 @@ class AnalisisController extends Controller
                 // Si no se selecciona ningún análisis válido, se muestra un mensaje de error
                 return redirect()->back()->with('error', 'Tipo de análisis no válido.');
         }
-        // return $resultado;
+        // return $resultado['mas_vendidos'];
         return view('analisis.resultado', compact('resultado', 'tipoAnalisis', 'categoria'));
     }
 }
